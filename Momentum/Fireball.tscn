@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=3 uid="uid://ci7kyh5gaq4kj"]
+
+[ext_resource type="Script" uid="uid://4mub3hmm5d35" path="res://fireball.gd" id="1_yn1k2"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_olwj8"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_wdani"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nix7o"]
+albedo_color = Color(0, 1, 0, 1)
+emission_enabled = true
+emission = Color(0, 1, 0, 1)
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sf4mh"]
+emission_shape = 1
+emission_sphere_radius = 0.5
+gravity = Vector3(5, 0, 0)
+radial_accel_min = -2.2351742e-06
+radial_accel_max = 2.9999976
+turbulence_noise_strength = 0.0
+turbulence_noise_scale = 10.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_olwj8"]
+transparency = 1
+albedo_color = Color(0, 1, 0, 0.4745098)
+emission_enabled = true
+emission = Color(0, 1, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_nix7o"]
+material = SubResource("StandardMaterial3D_olwj8")
+radius = 0.1
+height = 0.2
+
+[node name="Fireball" type="Area3D"]
+script = ExtResource("1_yn1k2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_olwj8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CollisionShape3D"]
+mesh = SubResource("SphereMesh_wdani")
+surface_material_override/0 = SubResource("StandardMaterial3D_nix7o")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+visibility_aabb = AABB(-0.5, -0.5, -0.5, 1, 1, 1)
+process_material = SubResource("ParticleProcessMaterial_sf4mh")
+draw_pass_1 = SubResource("SphereMesh_nix7o")

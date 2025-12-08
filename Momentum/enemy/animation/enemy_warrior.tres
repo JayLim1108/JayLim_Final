@@ -1,0 +1,28 @@
+[gd_resource type="AnimationLibrary" load_steps=12 format=3 uid="uid://b6ccg2odhg0a8"]
+
+[ext_resource type="Animation" uid="uid://dig11ue5ms3bl" path="res://enemy/animation/minion,warrior/attack.res" id="1_yscwh"]
+[ext_resource type="Animation" uid="uid://bg5dby4kepmj0" path="res://enemy/animation/rogue/body hit.res" id="2_pvwaj"]
+[ext_resource type="Animation" uid="uid://qsdk4fymw62t" path="res://enemy/animation/minion,warrior/death.res" id="3_jl0tx"]
+[ext_resource type="Animation" uid="uid://ds48jqgp20pwv" path="res://enemy/animation/minion,warrior/death pose.res" id="4_jek8x"]
+[ext_resource type="Animation" uid="uid://cptwh0wn6j1xx" path="res://enemy/animation/rogue/head hit.res" id="5_f0ye1"]
+[ext_resource type="Animation" uid="uid://bjugbodpihar1" path="res://enemy/animation/minion,warrior/idle.res" id="6_np5sh"]
+[ext_resource type="Animation" uid="uid://ccgdricyk6qc6" path="res://enemy/animation/rogue/jump idle.res" id="7_okgav"]
+[ext_resource type="Animation" uid="uid://cp2m3hx5nhtnu" path="res://enemy/animation/rogue/jump land.res" id="8_e5i0l"]
+[ext_resource type="Animation" uid="uid://csrjulprr6pmk" path="res://enemy/animation/rogue/jump start.res" id="9_x23ik"]
+[ext_resource type="Animation" uid="uid://dat307q43guf0" path="res://enemy/animation/minion,warrior/spawn.res" id="10_opq44"]
+[ext_resource type="Animation" uid="uid://b2a8fhhqii6av" path="res://enemy/animation/rogue/walk.res" id="11_jytks"]
+
+[resource]
+_data = {
+&"attack": ExtResource("1_yscwh"),
+&"body hit": ExtResource("2_pvwaj"),
+&"death": ExtResource("3_jl0tx"),
+&"death pose": ExtResource("4_jek8x"),
+&"head hit": ExtResource("5_f0ye1"),
+&"idle": ExtResource("6_np5sh"),
+&"jump idle": ExtResource("7_okgav"),
+&"jump land": ExtResource("8_e5i0l"),
+&"jump start": ExtResource("9_x23ik"),
+&"spawn": ExtResource("10_opq44"),
+&"walking": ExtResource("11_jytks")
+}

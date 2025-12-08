@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://boukq1x6x1dus"]
+
+[ext_resource type="PackedScene" uid="uid://dtql5k1ux4y73" path="res://map/environment_pack_-_egypt_map.glb" id="1_7w3rw"]
+[ext_resource type="PackedScene" uid="uid://b1hhcwcgno214" path="res://player.tscn" id="2_tbnrc"]
+
+[node name="main" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1000, 0)
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_7w3rw")]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
+
+[node name="Sketchfab_Scene" parent="Sketchfab_Scene" instance=ExtResource("1_7w3rw")]
+transform = Transform3D(-1, 0, 8.7422784e-08, 0, 1, 0, -8.7422784e-08, 0, -1, 0, 0, 26.6)
+
+[node name="player" parent="." instance=ExtResource("2_tbnrc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -174, 277, 139)

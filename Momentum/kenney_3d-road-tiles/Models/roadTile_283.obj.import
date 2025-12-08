@@ -1,0 +1,25 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://uhm2ap2ijy8q"
+path="res://.godot/imported/roadTile_283.obj-67a25075a5e80d6fe8003fc18b0c85e2.mesh"
+
+[deps]
+
+files=["res://.godot/imported/roadTile_283.obj-67a25075a5e80d6fe8003fc18b0c85e2.mesh"]
+
+source_file="res://kenney_3d-road-tiles/Models/roadTile_283.obj"
+dest_files=["res://.godot/imported/roadTile_283.obj-67a25075a5e80d6fe8003fc18b0c85e2.mesh", "res://.godot/imported/roadTile_283.obj-67a25075a5e80d6fe8003fc18b0c85e2.mesh"]
+
+[params]
+
+generate_tangents=true
+generate_lods=true
+generate_shadow_mesh=true
+generate_lightmap_uv2=false
+generate_lightmap_uv2_texel_size=0.2
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+force_disable_mesh_compression=false
