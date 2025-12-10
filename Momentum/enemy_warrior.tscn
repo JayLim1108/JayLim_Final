@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dycojr6rw6x7h" path="res://enemy/KayKit_Skeletons_1.1_FREE/assets/gltf/Skeleton_Axe.gltf" id="14_2p5d6"]
 [ext_resource type="Texture2D" uid="uid://bbdm3j5d7u6tn" path="res://enemy/KayKit_Skeletons_1.1_FREE/characters/gltf/Skeleton_Warrior_skeleton_texture.png" id="15_qd2t0"]
 
-[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_0a2dn"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0a2dn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d3a7h"]
 size = Vector3(1, 0.7088623, 0.32348633)
@@ -319,10 +319,10 @@ radius = 0.53684837
 collision_layer = 4
 collision_mask = 7
 script = ExtResource("1_fl5u3")
-health = 250
+health = 350
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SeparationRayShape3D_0a2dn")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." groups=["enemy"]]
+shape = SubResource("CapsuleShape3D_0a2dn")
 
 [node name="Rig_Medium" type="Node3D" parent="CollisionShape3D"]
 
@@ -577,3 +577,5 @@ shape = SubResource("SphereShape3D_uadkb")
 libraries = {
 &"warrior&minion": ExtResource("6_0a2dn")
 }
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]

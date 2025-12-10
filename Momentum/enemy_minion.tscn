@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://cxui8f1j6uax1" path="res://head_hitbox.gd" id="3_g5sjp"]
 [ext_resource type="AnimationLibrary" uid="uid://b6ccg2odhg0a8" path="res://enemy/animation/enemy_warrior.tres" id="5_4fp6c"]
 
-[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_4fp6c"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4fp6c"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_81l68"]
 height = 1.4870605
@@ -280,19 +280,22 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[node name="Enemy_Minion" type="Node3D" groups=["enemy"]]
+[node name="Enemy_Minion" type="CharacterBody3D" groups=["enemy"]]
 script = ExtResource("1_bc06o")
-health = 200
+health = 250
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../CollisionShape3D")
+libraries = {
+&"": ExtResource("5_4fp6c")
+}
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
-shape = SubResource("SeparationRayShape3D_4fp6c")
-disabled = true
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." groups=["enemy"]]
+shape = SubResource("CapsuleShape3D_4fp6c")
 
-[node name="Rig_Medium" type="Node3D" parent="CharacterBody3D/CollisionShape3D"]
+[node name="Rig_Medium" type="Node3D" parent="CollisionShape3D"]
 
-[node name="Skeleton3D" type="Skeleton3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium"]
+[node name="Skeleton3D" type="Skeleton3D" parent="CollisionShape3D/Rig_Medium"]
 bones/0/name = "root"
 bones/0/parent = -1
 bones/0/rest = Transform3D(1, 0, 2.3841855e-07, 0, 1, 0, -2.3841855e-07, 0, 1, 0, 0, 0)
@@ -455,79 +458,75 @@ bones/22/position = Vector3(-5.138494e-10, 0.096125126, -0.057500005)
 bones/22/rotation = Quaternion(1.680592e-09, 1.6805931e-09, -0.70710665, 0.7071069)
 bones/22/scale = Vector3(0, 0, 0)
 
-[node name="Body" type="BoneAttachment3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D"]
+[node name="Body" type="BoneAttachment3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
 transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 bone_name = "chest"
 bone_idx = 11
 
-[node name="BodyHitbox" type="Area3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D/Body"]
+[node name="BodyHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Body"]
 script = ExtResource("2_ij28y")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D/Body/BodyHitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Body/BodyHitbox"]
 transform = Transform3D(1, -1.17346644e-07, -2.6077032e-07, 0, 1, -2.9802322e-08, 0, -6.482005e-07, 0.99999905, 0.0014286349, -0.354824, -0.016504683)
 shape = SubResource("CapsuleShape3D_81l68")
 
-[node name="Head" type="BoneAttachment3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D"]
+[node name="Head" type="BoneAttachment3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
 transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 bone_name = "head"
 bone_idx = 12
 
-[node name="HeadHitbox" type="Area3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D/Head"]
+[node name="HeadHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Head"]
 script = ExtResource("3_g5sjp")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D/Head/HeadHitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Head/HeadHitbox"]
 transform = Transform3D(0.99999994, 1.8626451e-09, 2.5902409e-08, 9.313226e-10, 1, 0, -3.2421667e-08, 0, 1, 0.003444329, 0.47475708, -0.032411233)
 shape = SubResource("SphereShape3D_bwqrc")
 
-[node name="BoneAttachment3D" type="BoneAttachment3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D"]
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
 transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 bone_name = "hand.r"
 bone_idx = 21
 
-[node name="WeaponHitbox" type="Area3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D/BoneAttachment3D"]
+[node name="WeaponHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/BoneAttachment3D"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D/BoneAttachment3D/WeaponHitbox"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/BoneAttachment3D/WeaponHitbox"]
 transform = Transform3D(1, -2.8904878e-11, 0, -1.16408216e-10, 1, -8.940697e-08, 0, 3.7413628e-11, 0.9999999, -0.10427868, 0.10928339, -0.014490008)
 shape = SubResource("BoxShape3D_mjimn")
 
-[node name="Skeleton_Minion_ArmLeft" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D"]
+[node name="Skeleton_Minion_ArmLeft" type="MeshInstance3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
 mesh = SubResource("ArrayMesh_em7ki")
 skin = SubResource("Skin_oemch")
 
-[node name="Skeleton_Minion_ArmRight" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D"]
+[node name="Skeleton_Minion_ArmRight" type="MeshInstance3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
 mesh = SubResource("ArrayMesh_wvnyj")
 skin = SubResource("Skin_oemch")
 
-[node name="Skeleton_Minion_Body" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D"]
+[node name="Skeleton_Minion_Body" type="MeshInstance3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
 mesh = SubResource("ArrayMesh_g2wia")
 skin = SubResource("Skin_oemch")
 
-[node name="Skeleton_Minion_Cloak" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D"]
+[node name="Skeleton_Minion_Cloak" type="MeshInstance3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
 mesh = SubResource("ArrayMesh_6h6rs")
 skin = SubResource("Skin_oemch")
 
-[node name="Skeleton_Minion_Eyes" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D"]
+[node name="Skeleton_Minion_Eyes" type="MeshInstance3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
 mesh = SubResource("ArrayMesh_xi0t3")
 skin = SubResource("Skin_oemch")
 
-[node name="Skeleton_Minion_Head" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D"]
+[node name="Skeleton_Minion_Head" type="MeshInstance3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
 mesh = SubResource("ArrayMesh_tkahx")
 skin = SubResource("Skin_oemch")
 
-[node name="Skeleton_Minion_Jaw" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D"]
+[node name="Skeleton_Minion_Jaw" type="MeshInstance3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
 mesh = SubResource("ArrayMesh_kl4pj")
 skin = SubResource("Skin_oemch")
 
-[node name="Skeleton_Minion_LegLeft" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D"]
+[node name="Skeleton_Minion_LegLeft" type="MeshInstance3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
 mesh = SubResource("ArrayMesh_8vx72")
 skin = SubResource("Skin_oemch")
 
-[node name="Skeleton_Minion_LegRight" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D/Rig_Medium/Skeleton3D"]
+[node name="Skeleton_Minion_LegRight" type="MeshInstance3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
 mesh = SubResource("ArrayMesh_ua7rl")
 skin = SubResource("Skin_oemch")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-root_node = NodePath("../CharacterBody3D/CollisionShape3D")
-libraries = {
-&"": ExtResource("5_4fp6c")
-}
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]

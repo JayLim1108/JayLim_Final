@@ -653,3 +653,5 @@ shape = SubResource("SphereShape3D_aeyux")
 libraries = {
 &"rogue": SubResource("AnimationLibrary_g67e4")
 }
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]

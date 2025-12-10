@@ -1,19 +1,21 @@
 extends Node3D
 
-# ▼▼▼ 인스펙터에서 설정하기 쉬운 배열 방식 ▼▼▼
-# 스폰 시간 (초): 작은 숫자부터 순서대로 입력하세요 (예: 0, 5, 60)
-@export var spawn_times: Array[float] = [0.0, 5.0, 60.0]
-# 스폰 적군 씬: 위 시간과 순서를 맞춰서 연결하세요 (예: 미니언, 미니언, 워리어)
+# ▼▼▼ 인스펙터 설정 ▼▼▼
+# 스폰 시간 (초)
+@export var spawn_times: Array[float] = [0.0, 10.0, 20.0, 30.0]
+# 스폰 적군 씬: 위 시간과 순서를 맞춰서 연결하세요 (예: 미니언, 워리어, 마법사, 레인저)
 @export var spawn_enemies: Array[PackedScene]
-
+# 플레이어 (바라보기용)
 @export var player: Node3D
+# [추가] 적군 스폰 포인트들이 모여있는 부모 노드 (SpawnPoints)
+@export var spawn_points_parent: Node3D 
+
+# 플레이어가 스폰될 위치 (Marker3D 등) - 사용하지 않는다면 비워두셔도 됩니다.
+@export var player_spawn_point: Node3D
 
 const GAME_DURATION = 600.0
-const START_INTERVAL = 10.0
-const END_INTERVAL = 2.0
-const SPAWN_COUNT_PER_TYPE = 5 # 종류당 소환 개수
-const SPAWN_RADIUS_MIN = 10.0
-const SPAWN_RADIUS_MAX = 20.0
+const START_INTERVAL = 3.0 # 시작 스폰 주기 (3초마다 1마리)
+const END_INTERVAL = 0.5   # 끝 스폰 주기 (0.5초마다 1마리 - 매우 빠름)
 
 var time_elapsed = 0.0
 var spawn_timer = 0.0
@@ -21,8 +23,23 @@ var current_interval = START_INTERVAL
 
 # 현재 등장 가능한 적군 목록 (시간이 지나면 추가됨)
 var available_enemies: Array[PackedScene] = []
-# 이미 해금된 인덱스를 추적
 var next_unlock_index = 0
+
+# 적군 스폰 포인트 목록 (Marker3D들)
+var spawn_markers: Array[Node] = []
+
+func _ready():
+	# 플레이어 스폰 위치 설정 (옵션)
+	if player and player_spawn_point:
+		player.global_position = player_spawn_point.global_position
+		# player.global_rotation = player_spawn_point.global_rotation
+
+	# 적군 스폰 포인트들을 미리 찾아둠
+	if spawn_points_parent:
+		spawn_markers = spawn_points_parent.get_children()
+		print("적군 스폰 포인트 개수: ", spawn_markers.size())
+	else:
+		print("경고: 인스펙터에서 Spawn Points Parent를 연결해주세요!")
 
 func _process(delta):
 	time_elapsed += delta
@@ -36,7 +53,7 @@ func _process(delta):
 	
 	spawn_timer -= delta
 	if spawn_timer <= 0:
-		spawn_wave()
+		spawn_wave() # 웨이브라기 보단 이제 한 마리씩 자주 나옴
 		spawn_timer = current_interval
 
 func check_unlock_enemies():
@@ -55,52 +72,46 @@ func spawn_wave():
 	if not player or available_enemies.is_empty():
 		return
 		
-	print("웨이브 시작! 주기: ", snapped(current_interval, 0.1), "초")
-	
-	# 해금된 모든 적 종류에 대해 반복
-	for enemy_scene in available_enemies:
-		# 종류당 5마리씩 생성
-		for i in range(SPAWN_COUNT_PER_TYPE):
-			spawn_one_enemy(enemy_scene)
+	# 한 번에 한 마리씩만 소환 (종류는 랜덤)
+	# 하지만 스폰 주기가 점점 빨라지므로 나중엔 엄청 많이 나옴
+	spawn_one_enemy()
 
-func spawn_one_enemy(enemy_scene):
+func spawn_one_enemy():
+	# 해금된 적들 중 랜덤 선택
+	var enemy_scene = available_enemies.pick_random()
 	var enemy = enemy_scene.instantiate()
-	
-	# 안전한 스폰 위치 찾기 (최대 10번 시도)
 	var spawn_pos = Vector3.ZERO
-	var valid_spawn = false
 	
-	for i in range(10):
-		var angle = randf() * PI * 2
-		var distance = randf_range(SPAWN_RADIUS_MIN, SPAWN_RADIUS_MAX)
-		var offset = Vector3(cos(angle), 0, sin(angle)) * distance
-		var potential_pos = player.global_position + offset
+	# 1. 스폰 마커가 있다면 그 중 하나 선택
+	if not spawn_markers.is_empty():
+		var random_marker = spawn_markers.pick_random()
+		spawn_pos = random_marker.global_position
 		
-		# 위에서 아래로 레이캐스트를 쏴서 바닥 확인
-		var space_state = get_world_3d().direct_space_state
-		var query = PhysicsRayQueryParameters3D.create(potential_pos + Vector3(0, 50, 0), potential_pos + Vector3(0, -50, 0))
-		var result = space_state.intersect_ray(query)
+		# (선택) 마커 위치에서 약간 랜덤하게 퍼지게 하기 (겹침 방지)
+		var random_offset = Vector3(randf_range(-1, 1), 0, randf_range(-1, 1))
+		spawn_pos += random_offset
 		
-		if result:
-			# 충돌한 물체가 바닥(StaticBody3D)인지 확인
-			if result.collider is StaticBody3D:
-				spawn_pos = result.position
-				valid_spawn = true
-				break
-	
-	if valid_spawn:
-		get_parent().add_child(enemy)
-		
-		# [수정] 바닥보다 약간 위에서 스폰되도록 조정 (바닥에 묻히지 않게)
-		# 캐릭터의 발바닥 위치(Origin)가 바닥에 닿아야 합니다.
-		spawn_pos.y += 0.1 
-		enemy.global_position = spawn_pos
-		
-		# 플레이어 바라보기 (Y축 기준)
-		enemy.look_at(player.global_position, Vector3.UP)
-		# 만약 모델이 뒤집혀 있다면 아래 줄의 주석을 해제하세요.
-		# enemy.rotate_object_local(Vector3.UP, PI) 
-		
+	# 2. 스폰 마커가 없다면 현재 스포너 위치 사용 (비상용)
 	else:
-		print("유효한 스폰 위치를 찾지 못했습니다.")
-		enemy.queue_free()
+		spawn_pos = global_position
+		var random_offset = Vector3(randf_range(-2, 2), 0, randf_range(-2, 2))
+		spawn_pos += random_offset
+
+	get_parent().add_child(enemy)
+	
+	# 바닥보다 약간 위에서 스폰
+	spawn_pos.y += 0.1 
+	enemy.global_position = spawn_pos
+	
+	# [수정] 안전한 look_at 처리 (오류 해결)
+	if player:
+		# Y축 높이를 맞춰서 바라보게 함 (기울어짐 방지)
+		var target_pos = player.global_position
+		target_pos.y = spawn_pos.y 
+		
+		# 거리가 너무 가까우면 look_at 실행 안 함 (오류 방지)
+		if spawn_pos.distance_squared_to(target_pos) > 0.01:
+			enemy.look_at(target_pos, Vector3.UP)
+	
+	# 모델이 뒤집혀 있다면 아래 주석 해제
+	# enemy.rotate_object_local(Vector3.UP, PI)

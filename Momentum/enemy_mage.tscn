@@ -319,7 +319,7 @@ _data = {
 &"walking": ExtResource("14_sky5s")
 }
 
-[node name="enemy_mage" type="CharacterBody3D"]
+[node name="enemy_mage" type="CharacterBody3D" groups=["enemy"]]
 script = ExtResource("1_jioq4")
 fireball_scene = ExtResource("2_p5nmo")
 health = 200
@@ -573,3 +573,5 @@ shape = SubResource("SphereShape3D_8krfs")
 libraries = {
 &"mage": SubResource("AnimationLibrary_jaay7")
 }
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
