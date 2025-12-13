@@ -58,6 +58,14 @@ reload={
 ]
 }
 
+[layer_names]
+
+3d_physics/layer_1="Environment"
+3d_physics/layer_2="Player"
+3d_physics/layer_3="Enemy"
+3d_physics/layer_4="Projectiles"
+3d_physics/layer_5="Floor, wall"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"

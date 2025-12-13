@@ -10,7 +10,7 @@ func hit(damage: int):
 		enemy_root.take_damage(final_damage)
 		
 		# (선택) 부위별 로그 출력
-		if damage_multiplier > 1.5:
+		if damage_multiplier > 1.0:
 			print("HEADSHOT! (", final_damage, ")")
 		else:
 			print("Body Shot. (", final_damage, ")")

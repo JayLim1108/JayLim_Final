@@ -5,7 +5,7 @@ extends Enemy
 # [필수] 인스펙터에서 Fireball.tscn 연결
 @export var fireball_scene: PackedScene 
 # [필수] 지팡이 끝 Marker3D 노드 연결 (경로 확인!)
-@onready var fire_point = $Rig_Medium/Skeleton3D/BoneAttachment3D/Skeleton_Staff2/FirePoint
+@onready var fire_point = $CollisionShape3D/Rig_Medium/Skeleton3D/BoneAttachment3D/Skeleton_Staff2/FirePoint
 
 var attack_range = 10.0 
 var is_attacking = false

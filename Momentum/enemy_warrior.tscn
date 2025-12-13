@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dycojr6rw6x7h" path="res://enemy/KayKit_Skeletons_1.1_FREE/assets/gltf/Skeleton_Axe.gltf" id="14_2p5d6"]
 [ext_resource type="Texture2D" uid="uid://bbdm3j5d7u6tn" path="res://enemy/KayKit_Skeletons_1.1_FREE/characters/gltf/Skeleton_Warrior_skeleton_texture.png" id="15_qd2t0"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0a2dn"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_0a2dn"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_d3a7h"]
 size = Vector3(1, 0.7088623, 0.32348633)
@@ -310,21 +310,25 @@ _surfaces = [{
 blend_shape_mode = 0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1e78y"]
-height = 1.4870605
+height = 1.4351501
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_uadkb"]
-radius = 0.53684837
+radius = 0.6069453
 
-[node name="Enemy_Warrior" type="CharacterBody3D"]
+[node name="Enemy_Warrior" type="CharacterBody3D" groups=["enemy"]]
 collision_layer = 4
-collision_mask = 7
+collision_mask = 15
+floor_max_angle = 1.5707964
+floor_snap_length = 10.0
 script = ExtResource("1_fl5u3")
 health = 350
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." groups=["enemy"]]
-shape = SubResource("CapsuleShape3D_0a2dn")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("SphereShape3D_0a2dn")
 
 [node name="Rig_Medium" type="Node3D" parent="CollisionShape3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
 [node name="Skeleton3D" type="Skeleton3D" parent="CollisionShape3D/Rig_Medium"]
 bones/0/name = "root"
@@ -555,16 +559,17 @@ bone_name = "chest"
 bone_idx = 11
 
 [node name="BodyHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Body"]
+transform = Transform3D(0.99999994, 0, -2.9802322e-08, 0, 0.99999994, 2.9802322e-08, 2.9802322e-08, -7.450581e-09, 1, 0, 0, 0)
 script = ExtResource("4_uqif5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Body/BodyHitbox"]
-transform = Transform3D(1, -1.17346644e-07, -2.6077032e-07, 0, 1, -2.9802322e-08, 0, -6.482005e-07, 0.99999905, 0.0014286349, -0.354824, -0.016504683)
+transform = Transform3D(0.9999999, 0, -1.1920929e-07, -2.9802322e-08, 0.9999998, 7.4505806e-08, 2.9802322e-08, -1.4901161e-08, 1, 0, 0.7220612, -5.379776e-09)
 shape = SubResource("CapsuleShape3D_1e78y")
 
 [node name="Head" type="BoneAttachment3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
-transform = Transform3D(0.26286307, -1.1920929e-07, 0.96483207, -2.3841858e-07, -0.9999988, 5.364418e-07, 0.9648323, -4.0233135e-07, -0.26286283, 0.5632459, 0.73283035, -0.033635683)
+transform = Transform3D(0.99972045, -1.4014349e-09, 0.023646593, 1.3934147e-09, 0.9999998, 3.5568637e-10, -0.023646593, -3.2263736e-10, 0.99972045, -4.3038546e-09, 1.2278259, 1.5739471e-15)
 bone_name = "head"
-bone_idx = 12
+bone_idx = 14
 
 [node name="HeadHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Head"]
 script = ExtResource("5_vfgef")
@@ -574,8 +579,9 @@ transform = Transform3D(0.99999994, 1.8626451e-09, 2.5902409e-08, 9.313226e-10, 
 shape = SubResource("SphereShape3D_uadkb")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." groups=["enemy"]]
+root_node = NodePath("../CollisionShape3D")
 libraries = {
-&"warrior&minion": ExtResource("6_0a2dn")
+&"": ExtResource("6_0a2dn")
 }
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]

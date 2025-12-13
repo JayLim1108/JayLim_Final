@@ -18,11 +18,11 @@ func _init():
 	speed = 5.0  # 속도도 다르게 설정 가능
 
 func _ready():
-	if anim_player.has_animation("spawn"):
-		anim_player.play("spawn")
+	if anim_player.has_animation("rogue/spawn"):
+		anim_player.play("rogue/spawn")
 		await anim_player.animation_finished
 	is_spawning = false
-	anim_player.play("idle")
+	anim_player.play("rogue/idle")
 
 func _physics_process(delta):
 	super(delta)
@@ -52,8 +52,8 @@ func _physics_process(delta):
 			velocity.x = direction.x * speed
 			velocity.z = direction.z * speed
 			
-			if anim_player.current_animation != "walk":
-				anim_player.play("walk")
+			if anim_player.current_animation != "rogue/walking":
+				anim_player.play("rogue/walking")
 				
 		elif dist <= attack_range:
 			velocity.x = 0
@@ -66,7 +66,7 @@ func _physics_process(delta):
 
 func attack():
 	is_attacking = true
-	anim_player.play("attack") # 활 쏘는 모션 재생
+	anim_player.play("rogue/attack") # 활 쏘는 모션 재생
 	
 	# 애니메이션 특정 타이밍에 발사 (또는 0.5초 뒤)
 	await get_tree().create_timer(0.5).timeout 
@@ -76,7 +76,7 @@ func attack():
 	is_attacking = false
 	
 	if health > 0:
-		anim_player.play("idle")
+		anim_player.play("rogue/idle")
 
 func shoot_arrow():
 	if arrow_scene and fire_point:

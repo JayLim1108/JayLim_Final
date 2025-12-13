@@ -392,6 +392,10 @@ _data = {
 }
 
 [node name="CharacterBody3D" type="CharacterBody3D" groups=["enemy"]]
+collision_layer = 4
+collision_mask = 15
+floor_max_angle = 1.5707964
+floor_snap_length = 10.0
 script = ExtResource("1_l0llf")
 health = 150
 

@@ -50,8 +50,8 @@ func _physics_process(delta):
 			look_at(player.global_position, Vector3.UP)
 			rotate_y(PI) # 모델이 뒤를 보고 있을 때 180도 회전
 			
-			if anim_player_minion and anim_player_minion.current_animation != "walk":
-				anim_player_minion.play("walk")
+			if anim_player_minion and anim_player_minion.current_animation != "walking":
+				anim_player_minion.play("walking")
 				
 		# 2. 공격 사거리 안이고, 공격 중이 아닐 때 -> 공격 시작
 		elif dist <= attack_range:

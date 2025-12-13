@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://blp4ctaryeo4p"]
+
+[node name="Arrow" type="Area3D"]
