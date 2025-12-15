@@ -8,12 +8,27 @@
 
 config_version=5
 
+[User_Settings]
+
+camera_sensitivity=13.0
+
 [application]
 
 config/name="새 게임 프로젝트"
-run/main_scene="uid://cbjg7djo286vw"
+run/main_scene="uid://rotms4ajkw6i"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+
+[importer_defaults]
+
+animation_library={
+&"animation/fps": 120.0
+}
 
 [input]
 
@@ -60,11 +75,11 @@ reload={
 
 [layer_names]
 
-3d_physics/layer_1="Environment"
+3d_physics/layer_1="Environment (Map)"
 3d_physics/layer_2="Player"
 3d_physics/layer_3="Enemy"
-3d_physics/layer_4="Projectiles"
-3d_physics/layer_5="Floor, wall"
+3d_physics/layer_4="Player Projectiles"
+3d_physics/layer_5="Enemy Projectiles"
 
 [rendering]
 

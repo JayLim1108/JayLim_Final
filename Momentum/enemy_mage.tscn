@@ -1,9 +1,8 @@
-[gd_scene load_steps=24 format=4 uid="uid://deowysheo4qob"]
+[gd_scene load_steps=23 format=4 uid="uid://deowysheo4qob"]
 
 [ext_resource type="Script" uid="uid://6cc6i0cvwv1p" path="res://enemy_mage.gd" id="1_jioq4"]
 [ext_resource type="PackedScene" uid="uid://ci7kyh5gaq4kj" path="res://Fireball.tscn" id="2_p5nmo"]
-[ext_resource type="Script" uid="uid://mgpfw215eobo" path="res://body_hitbox.gd" id="5_ikifm"]
-[ext_resource type="Script" uid="uid://cxui8f1j6uax1" path="res://head_hitbox.gd" id="6_37mol"]
+[ext_resource type="Script" uid="uid://b5d7uhh82hbtp" path="res://hitbox.gd" id="5_38xvv"]
 [ext_resource type="AnimationLibrary" uid="uid://c2djpj2btlvv0" path="res://enemy/animation/mage.res" id="7_e855k"]
 [ext_resource type="Texture2D" uid="uid://daq5rdki3bwyi" path="res://enemy/KayKit_Skeletons_1.1_FREE/characters/gltf/Skeleton_Mage_skeleton_texture.png" id="13_jaay7"]
 [ext_resource type="PackedScene" uid="uid://dfh21mlajtys4" path="res://enemy/KayKit_Skeletons_1.1_FREE/assets/gltf/Skeleton_Staff.gltf" id="16_pf8en"]
@@ -293,17 +292,19 @@ blend_shape_mode = 0
 height = 1.4870605
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_8krfs"]
-radius = 0.53684837
+radius = 0.5252933
 
 [node name="enemy_mage" type="CharacterBody3D" groups=["enemy"]]
 collision_layer = 4
-collision_mask = 15
+collision_mask = 9
 floor_max_angle = 1.5707964
 floor_snap_length = 10.0
 script = ExtResource("1_jioq4")
 fireball_scene = ExtResource("2_p5nmo")
+health = 150
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, 0)
 shape = SubResource("SphereShape3D_ikifm")
 
 [node name="Rig_Medium" type="Node3D" parent="CollisionShape3D"]
@@ -529,11 +530,12 @@ transform = Transform3D(-0.44502407, 0.57424927, 0.6871611, 0.046825428, -0.7513
 bone_name = "chest"
 bone_idx = 11
 
-[node name="BodyHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Body"]
-script = ExtResource("5_ikifm")
+[node name="BodyHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Body" node_paths=PackedStringArray("enemy_root")]
+script = ExtResource("5_38xvv")
+enemy_root = NodePath("../../../../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Body/BodyHitbox"]
-transform = Transform3D(1, -1.17346644e-07, -2.6077032e-07, 0, 1, -2.9802322e-08, 0, -6.482005e-07, 0.99999905, 0.0014286349, -0.354824, -0.016504683)
+transform = Transform3D(0.9986292, -0.052335948, 0, 0.04009166, 0.7649944, 0.64278704, -0.03364089, -0.64190644, 0.7660438, 0.21275951, -0.2745405, -0.32852185)
 shape = SubResource("CapsuleShape3D_pf8en")
 
 [node name="Head" type="BoneAttachment3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D"]
@@ -541,11 +543,14 @@ transform = Transform3D(0.26286298, -2.9802322e-08, 0.96483254, -1.4901161e-07, 
 bone_name = "head"
 bone_idx = 12
 
-[node name="HeadHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Head"]
-script = ExtResource("6_37mol")
+[node name="HeadHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Head" node_paths=PackedStringArray("enemy_root")]
+transform = Transform3D(1, 5.684342e-14, 5.9604645e-08, 7.1054274e-14, 1, -1.0658141e-14, -5.9604645e-08, 2.1316282e-14, 1, 0, 5.9604645e-08, 0)
+script = ExtResource("5_38xvv")
+damage_multiplier = 2.0
+enemy_root = NodePath("../../../../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Head/HeadHitbox"]
-transform = Transform3D(0.99999994, 1.8626451e-09, 2.5902409e-08, 9.313226e-10, 1, 0, -3.2421667e-08, 0, 1, 0.003444329, 0.47475708, -0.032411233)
+transform = Transform3D(1, 1.8627304e-09, 8.940697e-08, 9.313226e-10, 1, 3.5527137e-15, -8.940697e-08, 1.4210855e-14, 1.0000001, -0.09788397, -0.875, -0.52033216)
 shape = SubResource("SphereShape3D_8krfs")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." groups=["enemy"]]

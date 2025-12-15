@@ -1,0 +1,115 @@
+[gd_scene load_steps=8 format=3 uid="uid://drpx5xkydqwx3"]
+
+[ext_resource type="Script" uid="uid://bnethfwbuqxsf" path="res://user_interface.gd" id="1_fqfk8"]
+[ext_resource type="Texture2D" uid="uid://c1nl6a3ofrs0d" path="res://crosshair.png" id="2_v2xe2"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_5oe6h"]
+font_size = 50
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_fqfk8"]
+font_size = 30
+outline_size = 1
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_v2xe2"]
+font_size = 40
+
+[sub_resource type="LabelSettings" id="LabelSettings_iqou4"]
+font_size = 60
+
+[sub_resource type="LabelSettings" id="LabelSettings_csgjf"]
+font_size = 50
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_fqfk8")
+
+[node name="Crosshair" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 960.0
+offset_top = 540.0
+offset_right = 1560.0
+offset_bottom = 1140.0
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_v2xe2")
+
+[node name="AmmoLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 1687.9999
+offset_top = 858.99994
+offset_right = 1842.9999
+offset_bottom = 999.99994
+rotation = 0.05235988
+text = "ammo
+8 / 8"
+label_settings = SubResource("LabelSettings_5oe6h")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HealthTextLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 111.99999
+offset_top = 856.0
+offset_right = 242.0
+offset_bottom = 898.0
+rotation = -0.05235988
+text = "250 / 250"
+label_settings = SubResource("LabelSettings_fqfk8")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Momentum" type="Label" parent="."]
+layout_mode = 0
+offset_left = 204.99997
+offset_top = 960.99994
+offset_right = 432.0
+offset_bottom = 1015.99994
+rotation = -0.05235988
+text = "Momentum"
+label_settings = SubResource("LabelSettings_v2xe2")
+
+[node name="HealthBarContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 100.99999
+offset_top = 913.99994
+offset_right = 442.66083
+offset_bottom = 958.0012
+rotation = -0.05235988
+theme_override_constants/separation = 6
+
+[node name="LevelLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 33.999996
+offset_top = 925.99994
+offset_right = 179.87152
+offset_bottom = 1036.0
+rotation = -0.05235988
+label_settings = SubResource("LabelSettings_iqou4")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="XPBar" type="ProgressBar" parent="."]
+layout_mode = 0
+offset_left = 199.0
+offset_top = 1015.9999
+offset_right = 440.07346
+offset_bottom = 1031.2292
+rotation = -0.05235988
+show_percentage = false
+
+[node name="ScoreLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 1512.0
+offset_top = 40.0
+offset_right = 1669.0
+offset_bottom = 109.0
+text = "score: "
+label_settings = SubResource("LabelSettings_csgjf")

@@ -1,11 +1,11 @@
 extends Area3D
 
 var speed = 20.0
-var damage = 20 
+var damage = 20
 
-
-@onready var mesh = $MeshInstance3D # 총알 본체
-@onready var collision = $CollisionShape3D # 충돌체
+# [수정] 파티클 및 메쉬 참조 제거 (불필요)
+# 만약 총알 자체의 MeshInstance3D나 CollisionShape3D를 제어해야 한다면 남겨두세요.
+# 여기서는 단순히 충돌 후 사라지는 기능만 남깁니다.
 
 func _ready():
 	# 2초 뒤 자동 삭제 (안전장치)
@@ -16,26 +16,23 @@ func _physics_process(delta):
 	# 전방(-Z축)으로 이동
 	position -= transform.basis.z * speed * delta
 
-# [중요] CharacterBody3D (몸통)와 충돌 시
+# [중요] CharacterBody3D (적군 본체)와 충돌 시
 func _on_body_entered(body):
-	if body.has_method("take_damage"):
-		body.take_damage(damage)
-		hit_target() # [수정] 충돌 처리 함수 호출
+	# 적군(Enemy) 그룹에 속해 있는지 확인
+	if body.is_in_group("enemy"):
+		if body.has_method("take_damage"):
+			# 적군에게 데미지 전달
+			# (이펙트 처리는 Enemy.gd의 take_damage 함수 내부에서 처리)
+			body.take_damage(damage) 
+			queue_free() # 총알 삭제
+	
+	# 벽이나 바닥과 충돌했는지 확인
 	elif body is StaticBody3D or body is CSGShape3D:
-		hit_target() # [수정] 충돌 처리 함수 호출
+		queue_free() # 총알 삭제
 
-# [중요] Area3D (헤드샷 히트박스 등)와 충돌 시
+# [중요] Area3D (적군 히트박스)와 충돌 시
 func _on_area_entered(area):
+	# 적군 히트박스인지 확인 (Hitbox.gd의 hit 함수가 있는지)
 	if area.has_method("hit"):
 		area.hit(damage)
-		hit_target() # [수정] 충돌 처리 함수 호출
-
-func hit_target():
-	create_hit_effect()
-	
-	queue_free() # 진짜 삭제
-
-func create_hit_effect():
-	# 여기에 피격 파티클 생성 코드 추가 가능
-	# print("Hit!")
-	pass
+		queue_free() # 총알 삭제

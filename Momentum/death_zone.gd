@@ -1,47 +1,37 @@
 extends Area3D
 
-# 플레이어 스폰 포인트 (Main 씬에서 직접 연결하거나 코드로 찾음)
-@export var player_spawn_point: Node3D
-
 func _ready():
-	# 시그널이 에디터에서 연결되지 않았을 경우를 대비해 코드로 연결
-	if not body_entered.is_connected(_on_body_entered):
-		body_entered.connect(_on_body_entered)
-	
-	# 안전장치: 플레이어 스폰 포인트가 연결 안 되어 있으면 찾기
-	if not player_spawn_point:
-		# "PlayerSpawnPoint"라는 이름의 노드를 찾거나, 
-		# EnemySpawner가 가지고 있는 player_spawn_point를 참조할 수도 있음
-		player_spawn_point = get_tree().get_first_node_in_group("player_spawn_point")
+	body_entered.connect(_on_body_entered)
 
 func _on_body_entered(body):
-	print("DeathZone에 무언가 닿음: ", body.name) # 디버그 출력
-	
 	# 1. 플레이어가 떨어진 경우
-	if body.is_in_group("player") or body.name == "Player":
-		print("플레이어 낙사 감지!")
+	if body.is_in_group("player"):
+		print("플레이어 낙사! 체력 -10 및 리스폰")
 		
-		# 데미지 주기 (10)
 		if body.has_method("take_damage"):
 			body.take_damage(10)
 		
-		# 플레이어 리스폰 (강제 이동)
-		respawn_player(body)
+		# 플레이어 리스폰
+		respawn_body(body)
 		
 	# 2. 적군(Enemy)이 떨어진 경우
-	elif body is Enemy or body.is_in_group("enemy"):
-		print("적군 낙사! 삭제")
-		body.queue_free()
+	elif body is Enemy:
+		print("적군 낙사! 리스폰")
+		
+		# [수정] 삭제(queue_free) 대신 리스폰(respawn_body) 호출!
+		# body.queue_free()  <-- 이 줄을 삭제하거나 주석 처리했습니다.
+		respawn_body(body)   # <-- 리스폰 함수 호출
 
-func respawn_player(player_body):
-	# 지정된 스폰 포인트로 이동
-	if player_spawn_point:
-		# 물리 엔진 간섭을 피하기 위해 velocity 초기화
-		player_body.velocity = Vector3.ZERO
-		player_body.global_position = player_spawn_point.global_position
-		print("플레이어 리스폰 완료: ", player_spawn_point.global_position)
+# 공통 리스폰 함수
+func respawn_body(body):
+	# 'respawn_point' 그룹에 있는 모든 노드(Marker3D)를 가져옴
+	var spawn_points = get_tree().get_nodes_in_group("respawn_point")
+	
+	if spawn_points.size() > 0:
+		var random_point = spawn_points.pick_random()
+		
+		body.velocity = Vector3.ZERO
+		# 리스폰 지점보다 약간 위에서 생성되도록 Y축 값을 더해줍니다.
+		body.global_position = random_point.global_position + Vector3(0, 1.0, 0)
 	else:
-		# 스폰 포인트가 없으면 원점(0, 10, 0)으로 비상 리스폰
-		print("오류: 플레이어 스폰 포인트를 찾을 수 없습니다! 원점으로 이동합니다.")
-		player_body.velocity = Vector3.ZERO
-		player_body.global_position = Vector3(0, 10, 0)
+		print("오류: 씬에 'respawn_point' 그룹을 가진 Marker3D가 없습니다!")

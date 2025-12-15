@@ -2,8 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dakmnrktfmyls" path="res://enemy_minion.gd" id="1_bc06o"]
 [ext_resource type="Texture2D" uid="uid://cyp5o2wca8nkl" path="res://enemy/KayKit_Skeletons_1.1_FREE/characters/gltf/Skeleton_Minion_skeleton_texture.png" id="2_7vdom"]
-[ext_resource type="Script" uid="uid://mgpfw215eobo" path="res://body_hitbox.gd" id="2_ij28y"]
-[ext_resource type="Script" uid="uid://cxui8f1j6uax1" path="res://head_hitbox.gd" id="3_g5sjp"]
+[ext_resource type="Script" uid="uid://b5d7uhh82hbtp" path="res://hitbox.gd" id="2_fc1lp"]
 [ext_resource type="AnimationLibrary" uid="uid://b6ccg2odhg0a8" path="res://enemy/animation/enemy_warrior.tres" id="5_4fp6c"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4fp6c"]
@@ -281,17 +280,22 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[node name="Enemy_Minion" type="CharacterBody3D" groups=["enemy"]]
-collision_layer = 5
-collision_mask = 15
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_250sh"]
+radius = 2.0
+height = 4.0
+
+[node name="Enemy_Minion" type="CharacterBody3D" node_paths=PackedStringArray("attack_area") groups=["enemy"]]
+collision_layer = 4
+collision_mask = 9
 floor_stop_on_slope = false
 floor_max_angle = 1.5707964
 floor_snap_length = 10.0
 script = ExtResource("1_bc06o")
-health = 250
+attack_area = NodePath("AttackArea")
+health = 200
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0.5, 0)
 shape = SubResource("CapsuleShape3D_4fp6c")
 
 [node name="Rig_Medium" type="Node3D" parent="CollisionShape3D"]
@@ -465,10 +469,11 @@ transform = Transform3D(0.9997451, -0.0219616, 0.005238044, 0.022557572, 0.96182
 bone_name = "chest"
 bone_idx = 11
 
-[node name="BodyHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Body"]
-collision_layer = 5
-collision_mask = 5
-script = ExtResource("2_ij28y")
+[node name="BodyHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Body" node_paths=PackedStringArray("enemy_root")]
+collision_layer = 4
+collision_mask = 9
+script = ExtResource("2_fc1lp")
+enemy_root = NodePath("../../../../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Body/BodyHitbox"]
 transform = Transform3D(1, -1.17346644e-07, -2.6077032e-07, 0, 1, -2.9802322e-08, 0, -6.482005e-07, 0.99999905, 0.0014286349, -0.354824, -0.016504683)
@@ -479,10 +484,12 @@ transform = Transform3D(0.9997451, -0.021961601, 0.005238045, 0.022035161, 0.999
 bone_name = "head"
 bone_idx = 12
 
-[node name="HeadHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Head"]
-collision_layer = 5
-collision_mask = 5
-script = ExtResource("3_g5sjp")
+[node name="HeadHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Head" node_paths=PackedStringArray("enemy_root")]
+collision_layer = 4
+collision_mask = 9
+script = ExtResource("2_fc1lp")
+damage_multiplier = 2.0
+enemy_root = NodePath("../../../../..")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/Head/HeadHitbox"]
 transform = Transform3D(0.99999994, 1.8626451e-09, 2.5902409e-08, 9.313226e-10, 1, 0, -3.2421667e-08, 0, 1, 0.003444329, 0.47475708, -0.032411233)
@@ -494,6 +501,8 @@ bone_name = "hand.r"
 bone_idx = 21
 
 [node name="WeaponHitbox" type="Area3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/BoneAttachment3D"]
+collision_layer = 0
+collision_mask = 2
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CollisionShape3D/Rig_Medium/Skeleton3D/BoneAttachment3D/WeaponHitbox"]
 transform = Transform3D(1, -2.8904878e-11, 0, -1.16408216e-10, 1, -8.940697e-08, 0, 3.7413628e-11, 0.9999999, -0.10427868, 0.10928339, -0.014490008)
@@ -542,3 +551,11 @@ libraries = {
 }
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="AttackArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AttackArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+shape = SubResource("CapsuleShape3D_250sh")
