@@ -64,3 +64,13 @@ size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.8745098, 0.8745098, 0.8745098, 0.39215687)
 theme_override_font_sizes/font_size = 50
 text = "3"
+
+[node name="IgnoreButton" type="Button" parent="Background/CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "IGNORE"
+
+[connection signal="pressed" from="Background/CenterContainer/VBoxContainer/HBoxContainer/ChoiceButton1" to="." method="_on_choice_button_1_pressed"]
+[connection signal="pressed" from="Background/CenterContainer/VBoxContainer/HBoxContainer/ChoiceButton2" to="." method="_on_choice_button_2_pressed"]
+[connection signal="pressed" from="Background/CenterContainer/VBoxContainer/HBoxContainer/ChoiceButton3" to="." method="_on_choice_button_3_pressed"]
+[connection signal="pressed" from="Background/CenterContainer/VBoxContainer/IgnoreButton" to="." method="_on_ignore_button_pressed"]
